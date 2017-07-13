@@ -18,12 +18,14 @@ install <- function(packages, options = list()) {
 }
 
 
-# uninstall <- function(packages, options = list()) {
-# }
+uninstall <- function(packages, options = list()) {
+  do.call(utils::remove.packages, c(list(packages), options))
+}
 
 
-# upgrade <- function(packages, options = list() {
-# }
+upgrade <- function(packages, options = list()) {
+  do.call(utils::update.packages, c(list(oldPkgs = packages), options))
+}
 
 
 # search <- function(packages, options = list()) {
@@ -41,6 +43,8 @@ main <- function() {
 
   switch(cmd,
     "install" = install(args, options),
+    "remove" = upgrade(args, options),
+    "upgrade" = upgrade(args, options),
     stop(sprintf("Invalid command: %s", cmd))
   )
 }
