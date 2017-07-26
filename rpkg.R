@@ -1,51 +1,159 @@
 #! Rscript --no-save --no-restore
 
 # TODO: main() CLI argument handling
+# use optparse() library?
 
 
-get_installed_packages <- function(options = list()) {
-  rownames(do.call(utils::installed.packages, options))
+..VERSION.. <- 0.2
+
+
+exit <- function(status = 0L, msg = NULL, con = if (status) stderr() else stdout()) {
+  if (!is.null(msg)) {
+    cat(msg, "\n", file = con)
+  }
+
+  quit(save = "no", status = status, runLast = FALSE)
 }
 
 
-install <- function(packages, options = list()) {
-  # TODO: say something when a package is already installed,
-  #       instead of failing silently
+#' Get names of installed packags
+#'
+#' @param ... Arguments passed to \code{\link{installed.packages()}}
+get_installed_packages <- function(...) {
+  rownames(utils::installed.packages(...))
+}
+
+
+#' Install packages
+#'
+#' @param packages Character vector of package names
+#' @param opts List of named options, passed to \code{\link{install.packages()}}
+pkg_install <- function(packages, opts = list()) {
   installed <- get_installed_packages()
-  packages_to_install <- setdiff(packages, installed)
+  already_installed <- intersect(packages, installed)
 
-  do.call(utils::install.packages, c(list(packages_to_install), options))
+  if (length(already_installed)) {
+    message("These packages already been installed and will be skipped:")
+    cat(already_installed, "\n", file = stderr())
+    packages_to_install <- setdiff(packages, already_installed)
+  } else {
+    packages_to_install <- packages
+  }
+
+  if (!length(packages_to_install)) {
+    exit(66, "No packages specified")
+  }
+  do.call(utils::install.packages, c(list(packages_to_install), opts))
 }
 
 
-uninstall <- function(packages, options = list()) {
-  do.call(utils::remove.packages, c(list(packages), options))
+#' Remove packages
+#'
+#' @param packages Character vector of package names
+#' @param opts List of named options, passed to \code{\link{remove.packages()}}
+pkg_remove <- function(packages, opts = list()) {
+  installed <- get_installed_packages()
+  notyet_installed <- setdiff(packages, installed)
+
+  if (length(notyet_installed)) {
+    message("These packages are not installed and will be skipped:")
+    cat(notyet_installed, "\n", file = stderr())
+    packages_to_remove <- intersect(packages, installed)
+  } else {
+    packages_to_remove <- packages
+  }
+
+  if (!length(packages_to_remove)) {
+    exit(66, "No packages specified")
+  }
+  do.call(utils::remove.packages, c(list(packages_to_remove), opts))
 }
 
 
-upgrade <- function(packages, options = list()) {
-  do.call(utils::update.packages, c(list(oldPkgs = packages), options))
+#' Update packages
+#'
+#' @param packages Character vector of package names
+#' @param opts List of named options, passed to \code{\link{update.packages()}}
+pkg_update <- function(packages, opts = list()) {
+  opts$ask <- FALSE
+  opts$oldPkgs <- NULL
+  do.call(utils::update.packages, c(list(oldPkgs = packages), opts))
 }
 
 
-# search <- function(packages, options = list()) {
-# }
+#' Check for outdated packages
+#'
+#' @param packages Character vector of package names
+#' @param opts List of named options, passed to \code{\link{old.packages()}}
+pkg_outdated <- function(packages, opts = list()) {
+  if (length(packages)) {
+    opts$instPkgs <- packages
+  }
+
+  do.call(utils::old.packages, opts)
+}
+
+pkg_search <- function(packages, opts = list()) {
+  exit(69, "Package search not implemented")
+}
+
+
+rpkg_version <- ..VERSION..
+rpkg_help <- sprintf(
+"Rpkg version %s
+
+Commands:
+    help
+    install / add
+    upgrade / update
+    uninstall / remove
+    search (not implemented)
+
+Options:
+    -V / --version
+    -h / --help",
+rpkg_version)
 
 
 main <- function() {
-  all_args <- commandArgs(trailingOnly = TRUE)
+  cli_args <- commandArgs(trailingOnly = TRUE)
 
-  cmd <- all_args[1]
+  cmd <- cli_args[1]
+  pkgs <- cli_args[-1]
 
-  # TODO
-  args <- all_args[-1]
-  options <- list()
+  if (any(cli_args %in% c("-V", "--version"))) {
+    exit(0, rpkg_version)
+  }
 
+  if (any(cli_args %in% c("-h", "--help"))) {
+    exit(0, rpkg_help)
+  }
+
+  opts <- list()
+
+  # TODO: handle "--" to stop processing option flags
+  # TODO: handle "ask = TRUE" (why doesn't it work, anyway?)
+  # TODO: handle verbosity
+  # TODO: self-update?
   switch(cmd,
-    "install" = install(args, options),
-    "remove" = upgrade(args, options),
-    "upgrade" = upgrade(args, options),
-    stop(sprintf("Invalid command: %s", cmd))
+    "install"   = pkg_install(pkgs, opts),
+    "add"       = pkg_install(pkgs, opts),
+
+    # TODO: handle "--all"
+    "update"    = pkg_update(pkgs, opts),
+    "upgrade"   = pkg_update(pkgs, opts),
+
+    # TODO: handle pkg names
+    "outdated"  = pkg_outdated(NULL, opts),
+
+    "remove"    = pkg_remove(pkgs, opts),
+    "uninstall" = pkg_remove(pkgs, opts),
+
+    "search"    = pkg_search(pkgs, opts),
+
+    "help"      = exit(0, rpkg_help),
+    `NA`        = exit(64, "No command specified"),
+                  exit(64, sprintf("Invalid command: %s", cmd))
   )
 }
 
