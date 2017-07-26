@@ -75,9 +75,23 @@ pkg_remove <- function(packages, opts = list()) {
 #' @param packages Character vector of package names
 #' @param opts List of named options, passed to \code{\link{update.packages()}}
 pkg_update <- function(packages, opts = list()) {
+  installed <- get_installed_packages()
+  notyet_installed <- setdiff(packages, installed)
+
+  if (length(notyet_installed)) {
+    message("These packages are not installed and will be skipped:")
+    cat(notyet_installed, "\n", file = stderr())
+    packages_to_update <- intersect(packages, installed)
+  } else {
+    packages_to_update <- packages
+  }
+
+  if (!length(packages_to_update)) {
+    exit(66, "No packages specified")
+  }
   opts$ask <- FALSE
   opts$oldPkgs <- NULL
-  do.call(utils::update.packages, c(list(oldPkgs = packages), opts))
+  do.call(utils::update.packages, c(list(oldPkgs = packages_to_update), opts))
 }
 
 
