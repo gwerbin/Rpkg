@@ -1,0 +1,5 @@
+- Unit tests
+- CLI functional tests (using `expect`?)
+- License
+- README, docs
+- Various TODOs in code
