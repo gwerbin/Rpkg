@@ -33,7 +33,7 @@ pkg_install <- function(packages, opts = list()) {
   already_installed <- intersect(packages, installed)
 
   if (length(already_installed)) {
-    message("These packages already been installed and will be skipped:")
+    message("These packages are already installed and will be skipped:")
     cat(already_installed, "\n", file = stderr())
     packages_to_install <- setdiff(packages, already_installed)
   } else {
