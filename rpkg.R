@@ -158,7 +158,8 @@ main <- function() {
 
   opts <- list()
 
-  # TODO: handle "--" to stop processing option flags
+  # TODO: handle arguments platform-independently
+  # TODO: handle "--" to stop processing option flags?
   # TODO: handle "ask = TRUE" (why doesn't it work, anyway?)
   # TODO: handle verbosity
   # TODO: self-update?

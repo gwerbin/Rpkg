@@ -1,30 +1,31 @@
-# R CLI package manager
+# Rpkg: command-line interface to the R package manager
 
-## Installation
+## What is this?
 
-1. Install R version > 3.4 (older versions are untested and unsupported)
-2. `sudo ln -s ./rpkg.R /usr/local/bin/Rpkg`, or otherwise make the `rpkg.R` 
-   script visible in your system's `PATH` variable.
+This is a very simple command-line interface to the R package manager. 
+Typically this system is accessed using functions in the R console like 
+`install.packages()`. I wrote this tool because sometimes I find it 
+inconvenient to open an R console to manage the R package library.
 
-## Instructions
+The interface is currently very minimal, and several features have not yet 
+been implemented. On the other hand, it has no dependencies other than R 
+itself. The vision is twofold:
+1. Create a simple, unified interface to the package management features 
+   that are built into R.
+2. Reach a stable, complete 1.0 interface that will not need to change much. 
+   In 10 years, when GitHub has gone the way of SourceForge, you should be 
+   able do download and run this program without serious problems, as long as 
+   R itself does not undergo radical changes (which it historically has not).
 
-```
-Commands:
-    help
-    install / add
-    update / upgrade
-    outdated
-    uninstall / remove
-    list (not implemented)
-    info (not implemented)
-    search (not implemented)
+If you like this program, or please feel free to submit pull requests or post 
+issues with bugs reports, feature requests, etc. I can't guarantee that I'll 
+have much time to work on it, but I do use it myself on a regular basis. So if 
+there is a substantial improvement to be made or a serious bug to fix, I 
+will be motivated to integrate the changes. See `TODO.md` for some of the 
+roadmap, as well as the various `TODO`s in the source code itself.
 
-Options:
-    -V / --version
-    -h / --help
-```
 
-# Example
+### Example
 
 ```
 $ Rpkg install purrr
@@ -50,3 +51,52 @@ downloaded 68 KB
 The downloaded source packages are in
 	‘/private/var/folders/4j/n8nxnsy12y92t475g318yptm0000gn/T/RtmpwUhQpG/downloaded_packages’
 ```
+
+
+## Installation instructions
+
+1. Install R version > 3.4 (older versions are untested and unsupported)
+2. `sudo ln -s ./rpkg.R /usr/local/bin/Rpkg`, or otherwise make the `rpkg.R` 
+   script visible in your system's `PATH` variable.
+
+In the code and documentation, I assume that you have copied or linked 
+`rpkg.R` with the name `Rpkg`, and that it is user-executable. Any other usage 
+is untested and unsupported.
+
+
+## Usage instructions
+
+Using Rpkg is much like any other package manager: `yum`, `brew`, `pip`, 
+`npm`, etc. Commands take the form:
+
+```shell
+Rpkg <main_options> <subcommand> <subcommand_options> <arguments>
+```
+
+The `main_options` are Unix-style flags (even on Windows, they are currently 
+hardcoded to use dashes and not slashes) that change the behavior of the main 
+`Rpkg` command. The `subcommand_options` apply specifically to the subcommand 
+being called.
+
+The `Rpkg help` subcommand prints a list of available commands and options for 
+the `Rpkg` script itself. In the future, `Rpkg help <subcommand>` will print 
+similar information for the listed subcommand.
+
+As a reference, the `Rpkg help` string from the source code is copied below:
+
+```
+Commands:
+    help
+    install / add
+    update / upgrade
+    outdated
+    uninstall / remove
+    list (not implemented)
+    info (not implemented)
+    search (not implemented)
+
+Options:
+    -V / --version
+    -h / --help
+```
+
