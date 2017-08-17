@@ -1,7 +1,7 @@
 #! Rscript --no-save --no-restore
 
 # TODO: main() CLI argument handling
-# use optparse() library?
+#       use optparse() library?
 
 
 ..VERSION.. <- 0.2
@@ -19,7 +19,7 @@ exit <- function(status = 0L, msg = NULL, con = if (status) stderr() else stdout
 #' Get names of installed packags
 #'
 #' @param ... Arguments passed to \code{\link{installed.packages()}}
-get_installed_packages <- function(...) {
+get_installed_package_names <- function(...) {
   rownames(utils::installed.packages(...))
 }
 
@@ -29,7 +29,7 @@ get_installed_packages <- function(...) {
 #' @param packages Character vector of package names
 #' @param opts List of named options, passed to \code{\link{install.packages()}}
 pkg_install <- function(packages, opts = list()) {
-  installed <- get_installed_packages()
+  installed <- get_installed_package_names()
   already_installed <- intersect(packages, installed)
 
   if (length(already_installed)) {
@@ -52,7 +52,7 @@ pkg_install <- function(packages, opts = list()) {
 #' @param packages Character vector of package names
 #' @param opts List of named options, passed to \code{\link{remove.packages()}}
 pkg_remove <- function(packages, opts = list()) {
-  installed <- get_installed_packages()
+  installed <- get_installed_package_names()
   notyet_installed <- setdiff(packages, installed)
 
   if (length(notyet_installed)) {
@@ -75,7 +75,7 @@ pkg_remove <- function(packages, opts = list()) {
 #' @param packages Character vector of package names
 #' @param opts List of named options, passed to \code{\link{update.packages()}}
 pkg_update <- function(packages, opts = list()) {
-  installed <- get_installed_packages()
+  installed <- get_installed_package_names()
   notyet_installed <- setdiff(packages, installed)
 
   if (length(notyet_installed)) {
@@ -101,10 +101,20 @@ pkg_update <- function(packages, opts = list()) {
 #' @param opts List of named options, passed to \code{\link{old.packages()}}
 pkg_outdated <- function(packages, opts = list()) {
   if (length(packages)) {
-    opts$instPkgs <- packages
+    exit(69, "Package selection not implemented for this subcommand")
   }
 
-  do.call(utils::old.packages, opts)
+  out <- do.call(utils::old.packages, opts)[, c("Installed", "ReposVer")]
+  colnames(out) <- c("Local", "Repo")
+  out
+}
+
+pkg_list <- function(packages, opts = list()) {
+  exit(69, "Package listing not implemented")
+}
+
+pkg_info <- function(packages, opts = list()) {
+  exit(69, "Package info not implemented")
 }
 
 pkg_search <- function(packages, opts = list()) {
@@ -119,8 +129,11 @@ rpkg_help <- sprintf(
 Commands:
     help
     install / add
-    upgrade / update
+    update / upgrade
+    outdated
     uninstall / remove
+    list (not implemented)
+    info (not implemented)
     search (not implemented)
 
 Options:
@@ -163,12 +176,16 @@ main <- function() {
     "remove"    = pkg_remove(pkgs, opts),
     "uninstall" = pkg_remove(pkgs, opts),
 
+    "list"      = pkg_list(pkgs, opts),
+    "info"      = pkg_info(pkgs, opts),
     "search"    = pkg_search(pkgs, opts),
 
     "help"      = exit(0, rpkg_help),
-    `NA`        = exit(64, "No command specified"),
+    # TODO: `help` accepts arguments and prints help info about each subcommand
+    `NA`        = exit(64, "No command specified. Try `Rpkg help` for instructions."),
                   exit(64, sprintf("Invalid command: %s", cmd))
   )
 }
+
 
 main()
