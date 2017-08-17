@@ -2,23 +2,36 @@
 
 # TODO: main() CLI argument handling
 #       use optparse() library?
+# TODO: unified interface instead of hideous error-prone copy and paste?
+#       specifically, needs a unified abstraction for checking whether a pkg 
+#       has already been installed
 
 
 ..VERSION.. <- "0.2.1"
 
 
+cat0 <- function (...) {
+  cat(..., sep = "")
+}
+
+
+cat0n <- function(...) {
+  cat0(..., "\n")
+}
+
+
 exit <- function(status = 0L, msg = NULL, con = if (status) stderr() else stdout()) {
   if (!is.null(msg)) {
-    cat(msg, "\n", file = con)
+    cat0n(msg, file = con)
   }
-
   quit(save = "no", status = status, runLast = FALSE)
 }
 
 
 #' Get names of installed packags
 #'
-#' @param ... Arguments passed to \code{\link{installed.packages()}}
+#' @param ... Arguments passed to \code{\link[utils]{installed.packages()}}
+#' @return Character vector of installed package names
 get_installed_package_names <- function(...) {
   rownames(utils::installed.packages(...))
 }
@@ -27,7 +40,8 @@ get_installed_package_names <- function(...) {
 #' Install packages
 #'
 #' @param packages Character vector of package names
-#' @param opts List of named options, passed to \code{\link{install.packages()}}
+#' @param opts List of named options, passed to \code{\link[utils]{install.packages()}}
+#' @return Result of \code{\link[utils]{install.packages}}
 pkg_install <- function(packages, opts = list()) {
   installed <- get_installed_package_names()
   already_installed <- intersect(packages, installed)
@@ -50,7 +64,8 @@ pkg_install <- function(packages, opts = list()) {
 #' Remove packages
 #'
 #' @param packages Character vector of package names
-#' @param opts List of named options, passed to \code{\link{remove.packages()}}
+#' @param opts List of named options, passed to \code{\link[utils]{remove.packages()}}
+#' @return Result of \code{\link[utils]{remove.packages()}}
 pkg_remove <- function(packages, opts = list()) {
   installed <- get_installed_package_names()
   notyet_installed <- setdiff(packages, installed)
@@ -73,7 +88,8 @@ pkg_remove <- function(packages, opts = list()) {
 #' Update packages
 #'
 #' @param packages Character vector of package names
-#' @param opts List of named options, passed to \code{\link{update.packages()}}
+#' @param opts List of named options, passed to \code{\link[utils]{update.packages()}}
+#' @return Result of \code{\link[utils]{update.packages()}}
 pkg_update <- function(packages, opts = list()) {
   installed <- get_installed_package_names()
   notyet_installed <- setdiff(packages, installed)
@@ -99,6 +115,7 @@ pkg_update <- function(packages, opts = list()) {
 #'
 #' @param packages Character vector of package names
 #' @param opts List of named options, passed to \code{\link{old.packages()}}
+#' @return Result of \code{\link[utils]{old.packages()}}
 pkg_outdated <- function(packages, opts = list()) {
   if (length(packages)) {
     exit(69, "Package selection not implemented for this subcommand")
@@ -110,7 +127,7 @@ pkg_outdated <- function(packages, opts = list()) {
 }
 
 pkg_list <- function(packages, opts = list()) {
-  exit(69, "Package listing not implemented")
+  cat(get_installed_package_names(), sep = "\n")
 }
 
 pkg_info <- function(packages, opts = list()) {
@@ -132,7 +149,7 @@ Commands:
     update / upgrade
     outdated
     uninstall / remove
-    list (not implemented)
+    list
     info (not implemented)
     search (not implemented)
 
