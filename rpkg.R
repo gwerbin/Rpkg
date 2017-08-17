@@ -4,7 +4,7 @@
 #       use optparse() library?
 
 
-..VERSION.. <- 0.2
+..VERSION.. <- "0.2.1"
 
 
 exit <- function(status = 0L, msg = NULL, con = if (status) stderr() else stdout()) {

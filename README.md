@@ -2,8 +2,9 @@
 
 ## Installation
 
-1. Install R (version >3.4 highly recommended)
-2. `ln -s ./rpkg.R ~/bin/Rpkg` or something along those lines
+1. Install R version > 3.4 (older versions are untested and unsupported)
+2. `sudo ln -s ./rpkg.R /usr/local/bin/Rpkg`, or otherwise make the `rpkg.R` 
+   script visible in your system's `PATH` variable.
 
 ## Instructions
 
@@ -11,8 +12,11 @@
 Commands:
     help
     install / add
-    upgrade / update
+    update / upgrade
+    outdated
     uninstall / remove
+    list (not implemented)
+    info (not implemented)
     search (not implemented)
 
 Options:
