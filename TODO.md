@@ -12,3 +12,5 @@
 - Proper `help` output -- can `optparse` do this? - 
 - Scour R documentation for hidden features and issues to be aware of
 - Figure out what older versions of R can run this
+- Consider using `devtools::install_*` family of functions for all 
+  installation stuff
