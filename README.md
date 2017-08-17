@@ -91,7 +91,7 @@ Commands:
     update / upgrade
     outdated
     uninstall / remove
-    list (not implemented)
+    list
     info (not implemented)
     search (not implemented)
 
