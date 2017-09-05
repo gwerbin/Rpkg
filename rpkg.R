@@ -4,7 +4,7 @@
 #       relevant options that are read by install.packages() and friends.
 # If you mess with or shadow any R built-in functions, woe betide you.
 
-..VERSION.. <- "0.4.2"
+..VERSION.. <- "0.4.3"
 
 
 ## TODO: use optparse or getopt library and .libPaths() so user doesn't have to have pkgs installed
@@ -385,7 +385,7 @@ main <- function() {
     },
     warning = function(wrn) {
       # treat warnings as errors for the purpose of a robust CLI tool
-      exit(sysexits$EX_SOFTWARE, paste("Error": conditionMessage(wrn)))
+      exit(sysexits$EX_SOFTWARE, paste("Error:", conditionMessage(wrn)))
     }  
   )
 }
