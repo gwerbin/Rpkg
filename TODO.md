@@ -3,6 +3,9 @@
 - Break out package management functions into separate package, and add that 
   package to our new .lib.loc entry
 
+- Intelligently resolve update.packages() dependency loops
+    Error in unloadNamespace(pkg_name) :
+      namespace ‘rlang’ is imported by ‘purrr’ so cannot be unloaded
 - Tests (unit tests, maybe CLI tests with `expect`)
 - Various TODOs in code
 - Support non-CRAN repos (e.g. MRAN), Bioconductor,
