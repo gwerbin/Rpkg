@@ -4,7 +4,7 @@
 #       relevant options that are read by install.packages() and friends.
 # If you mess with or shadow any R built-in functions, woe betide you.
 
-..VERSION.. <- "0.4.1"
+..VERSION.. <- "0.4.2"
 
 
 ## TODO: use optparse or getopt library and .libPaths() so user doesn't have to have pkgs installed
@@ -63,7 +63,7 @@ cat0n <- function(...) {
 
 
 exit <- function(status = 0L, msg = NULL, con = if (status) stderr() else stdout()) {
-  if (!is.null(msg)) {
+  if (!is.null(msg) && length(msg) > 0) {
     cat0n(msg, file = con)
   }
   quit(save = "no", status = status, runLast = FALSE)
@@ -310,6 +310,11 @@ subcommand_help <- function(...) {
 # TODO: handle verbosity
 # TODO: self-update?
 main <- function() {
+  # Set a default repo in case users don't have it in .Rprofile
+  if (is.null(getOption('repos'))) {
+    options(repos = c(CRAN = "https://cloud.r-project.org"))
+  }
+
   cli_args <- commandArgs(trailingOnly = TRUE)
 
   cmd <- cli_args[1]
