@@ -26,7 +26,7 @@ sysexits$EX_NOINPUT     <- 66
 #sysexits$EX_NOUSER      <- 67
 #sysexits$EX_NOHOST      <- 68
 sysexits$EX_UNAVAILABLE <- 69
-#sysexits$EX_SOFTWARE    <- 70
+sysexits$EX_SOFTWARE    <- 70
 #sysexits$EX_OSERR       <- 71
 #sysexits$EX_OSFILE      <- 72
 #sysexits$EX_CANTCREAT   <- 73
@@ -62,9 +62,9 @@ cat0n <- function(...) {
 }
 
 
-exit <- function(status = 0L, msg = NULL, con = if (status) stderr() else stdout()) {
+exit <- function(status = 0L, msg = NULL, con = if (length(status) && is.numeric(status) && status) stderr() else stdout()) {
   if (!is.null(msg) && length(msg) > 0) {
-    cat0n(msg, file = con)
+    cat0n(unlist(msg), file = con)
   }
   quit(save = "no", status = status, runLast = FALSE)
 }
@@ -311,7 +311,9 @@ subcommand_help <- function(...) {
 # TODO: self-update?
 main <- function() {
   # Set a default repo in case users don't have it in .Rprofile
-  if (is.null(getOption('repos'))) {
+  # TODO: use the CRAN selector dialog like in interactive mode
+  repos <- getOption("repos", default = "@CRAN@")
+  if (repos == "@CRAN@") {
     options(repos = c(CRAN = "https://cloud.r-project.org"))
   }
 
@@ -356,29 +358,36 @@ main <- function() {
   #   exit(sysexits$EX_USAGE, sprintf("Invalid command: %s", cmd))
   # )
   tryCatch(
-           switch(cmd,
-                  "install"   = pkg_install(pkgs, opts),
-                  "add"       = pkg_install(pkgs, opts),
+    switch(
+      cmd,
+      "install"   = pkg_install(pkgs, opts),
+      "add"       = pkg_install(pkgs, opts),
 
-                  "update"    = pkg_update(pkgs, opts),
-                  "upgrade"   = pkg_update(pkgs, opts),
+      "update"    = pkg_update(pkgs, opts),
+      "upgrade"   = pkg_update(pkgs, opts),
 
-                  # TODO: handle pkg names
-                  "outdated"  = pkg_outdated(NULL, opts),
+      # TODO: handle pkg names
+      "outdated"  = pkg_outdated(NULL, opts),
 
-                  "remove"    = pkg_remove(pkgs, opts),
-                  "uninstall" = pkg_remove(pkgs, opts),
+      "remove"    = pkg_remove(pkgs, opts),
+      "uninstall" = pkg_remove(pkgs, opts),
 
-                  "list"      = pkg_list(NULL, opts),
-                  "info"      = pkg_info(pkgs, opts),
-                  "search"    = pkg_search(pkgs, opts),
+      "list"      = pkg_list(NULL, opts),
+      "info"      = pkg_info(pkgs, opts),
+      "search"    = pkg_search(pkgs, opts),
 
-                  "help"      = subcommand_help(cmd),
-                  `NA`        = exit(sysexits$EX_USAGE, "No command specified. Try `Rpkg help` for instructions."),
-                  exit(sysexits$EX_USAGE, sprintf("Invalid command: %s", cmd))),
-           error = function(err) exit(sysexits$SOFTWARE, err),
-           warning = function(wrn) exit(sysexits$SOFTWARE, wrn)  # treat warnings as errors for the purpose of a robust CLI tool
-           )
+      "help"      = subcommand_help(cmd),
+      `NA`        = exit(sysexits$EX_USAGE, "No command specified. Try `Rpkg help` for instructions."),
+      exit(sysexits$EX_USAGE, sprintf("Invalid command: %s", cmd))
+    ),
+    error = function(err) {
+      exit(sysexits$EX_SOFTWARE, paste("Error:", conditionMessage(err)))
+    },
+    warning = function(wrn) {
+      # treat warnings as errors for the purpose of a robust CLI tool
+      exit(sysexits$EX_SOFTWARE, paste("Error": conditionMessage(wrn)))
+    }  
+  )
 }
 
 

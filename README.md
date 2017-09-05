@@ -69,6 +69,8 @@ is respected. HOWEVER, Rpkg is **not** robust to excessive tinkering, and if
 something breaks try `Rscript --no-save --no-restore --no-init rpkg.R` before 
 reporting a bug.
 
+The default repo when using this tool is `"https://cloud.r-project.org"`.
+
 
 ## Usage instructions
 
