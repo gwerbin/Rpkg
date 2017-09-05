@@ -4,7 +4,7 @@
 #       relevant options that are read by install.packages() and friends.
 # If you mess with or shadow any R built-in functions, woe betide you.
 
-..VERSION.. <- "0.4.0"
+..VERSION.. <- "0.4.1"
 
 
 ## TODO: use optparse or getopt library and .libPaths() so user doesn't have to have pkgs installed
@@ -377,4 +377,6 @@ main <- function() {
 }
 
 
-main()
+if (!interactive()) {
+  main()
+}
