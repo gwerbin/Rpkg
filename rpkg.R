@@ -279,19 +279,21 @@ rpkg_help <- sprintf(
 "Rpkg version %s
 
 Commands:
-    help [ subcommand ]
-    install / add pkg_name ...
-    update / upgrade [ --all ] pkg_name ...
+    help                      [ subcommand ]
+      NOTE: not fully implemented
+    ( install | add )         pkg_name ...
+    ( uninstall | remove )    pkg_name ...
+    ( update | upgrade )      [ --all ] pkg_name ...
     outdated
-    uninstall / remove [ pkg_name ]
     list
-    info pkg_name ...
-    search ( string | /regex/ )
+    info                      pkg_name ...
+    search                    ( string | /regex/ )
       NOTE: regex is PCRE, case-sensitive only if uppercase character is detected
 
 Options:
     -V / --version
-    -h / --help",
+    -h / --help
+",
 rpkg_version)
 
 

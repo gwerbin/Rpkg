@@ -24,8 +24,7 @@ there is a substantial improvement to be made or a serious bug to fix, I
 will be motivated to integrate the changes. See `TODO.md` for some of the 
 roadmap, as well as the various `TODO`s in the source code itself.
 
-
-### Example
+### Show-off example
 
 ```
 $ Rpkg install purrr
@@ -86,17 +85,65 @@ As a reference, the `Rpkg help` string from the source code is copied below:
 
 ```
 Commands:
-    help
-    install / add
-    update / upgrade
+    help                      [ subcommand ]
+      NOTE: not fully implemented
+    ( install | add )         pkg_name ...
+    ( uninstall | remove )    pkg_name ...
+    ( update | upgrade )      [ --all ] pkg_name ...
     outdated
-    uninstall / remove
     list
-    info (not implemented)
-    search (not implemented)
+    info                      pkg_name ...
+    search                    ( string | /regex/ )
+      NOTE: regex is PCRE, case-sensitive only if uppercase character is detected
 
 Options:
     -V / --version
     -h / --help
 ```
 
+
+### Examples
+
+Install `caret` and `shiny` from CRAN:
+
+```shell
+Rpkg install caret shiny
+Rpkg add caret shiny
+```
+
+Update `caret` and `shiny` to latest version on CRAN:
+
+```shell
+Rpkg update caret shiny
+Rpkg upgrade caret shiny
+```
+
+Update all packages:
+
+```shell
+Rpkg upgrade --all
+Rpkg update --all
+```
+
+Uninstall `caret` and `shiny`:
+
+```shell
+Rpkg uninstall caret shiny
+```
+
+Check for outdated packages, get info about the `forestFloor` package, list 
+installed packages:
+
+```shell
+Rpkg outdated
+Rpkg info forestFloor
+Rpkg list
+```
+
+Search CRAN:
+
+```shell
+Rpkg search ggplot
+Rpkg search '/^z[^aeiou]/' # pattern is a regular expression if wrapped in slashes
+Rpkg search '/^GG/'        # case-sensitive only if the pattern has an upper case character
+```
