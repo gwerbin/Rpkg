@@ -4,7 +4,7 @@
 #       relevant options that are read by install.packages() and friends.
 # If you mess with or shadow any R built-in functions, woe betide you.
 
-..VERSION.. <- "0.4.3"
+..VERSION.. <- "0.4.4"
 
 
 ## TODO: use optparse or getopt library and .libPaths() so user doesn't have to have pkgs installed
@@ -261,6 +261,15 @@ pkg_info <- function(packages, opts = list()) {
 }
 
 
+# Convenience alias for "uninstall" followed by "install"
+pkg_reinstall <- function(packages, opts = list()) {
+  for (package in packages) {
+    pkg_remove(package)
+    pkg_install(package, opts)
+  }
+}
+
+
 pkg_search <- function(patterns, opts = list()) {
   if (length(patterns) < 0) {
     exit(sysexits$EX_NOINPUT, "No patterns specified")
@@ -290,6 +299,7 @@ Commands:
     ( install | add )         pkg_name ...
     ( uninstall | remove )    pkg_name ...
     ( update | upgrade )      [ --all ] pkg_name ...
+    reinstall                 pkg_name ...
     outdated
     list
     info                      pkg_name ...
@@ -377,6 +387,8 @@ main <- function() {
 
       "remove"    = pkg_remove(pkgs, opts),
       "uninstall" = pkg_remove(pkgs, opts),
+
+      "reinstall" = pkg_reinstall(pkgs, opts),
 
       "list"      = pkg_list(NULL, opts),
       "info"      = pkg_info(pkgs, opts),
