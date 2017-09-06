@@ -4,7 +4,7 @@
 #       relevant options that are read by install.packages() and friends.
 # If you mess with or shadow any R built-in functions, woe betide you.
 
-..VERSION.. <- "0.4.4"
+..VERSION.. <- "0.5.0-rc01"
 
 
 ## TODO: use optparse or getopt library and .libPaths() so user doesn't have to have pkgs installed
@@ -288,7 +288,7 @@ pkg_search <- function(patterns, opts = list()) {
 #### Command-line interface ----
 
 
-rpkg_version <- ..VERSION..
+rpkg_version <- sprintf("Rpkg version %s", ..VERSION..)
 
 rpkg_help <- sprintf(
 "Rpkg version %s
@@ -310,7 +310,7 @@ Options:
     -V / --version
     -h / --help
 ",
-rpkg_version)
+..VERSION..)
 
 
 # TODO: `help` accepts arguments and prints help info about each subcommand
