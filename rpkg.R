@@ -220,9 +220,15 @@ pkg_outdated <- function(packages, opts = list()) {
     exit(sysexits$EX_UNAVAILABLE, "Package selection not implemented for this subcommand")
   }
 
-  out <- do.call(utils::old.packages, opts)[, c("Installed", "ReposVer")]
-  colnames(out) <- c("Local", "Repo")
-  out
+  out <- do.call(utils::old.packages, opts)
+  if (is.null(out)) {
+    catn("All packages are up-to date")
+  } else {
+    out <- out[, c("Installed", "ReposVer", "Repository")]
+    colnames(out) <- c("LocalVersion", "RemoteVersion", "Repo")
+    rownames(out) <- rep("", nrow(out))
+    print(out, quote = FALSE)
+  }
 }
 
 
