@@ -27,28 +27,33 @@ roadmap, as well as the various `TODO`s in the source code itself.
 ### Show-off example
 
 ```
-$ Rpkg install purrr
+$ Rpkg install forecast
 
 Installing package into ‘/usr/local/lib/R/3.4/site-library’
 (as ‘lib’ is unspecified)
-trying URL 'https://cloud.r-project.org/src/contrib/purrr_0.2.2.2.tar.gz'
-Content type 'application/x-gzip' length 70245 bytes (68 KB)
+trying URL 'https://cloud.r-project.org/src/contrib/forecast_8.1.tar.gz'
+Content type 'application/x-gzip' length 783567 bytes (765 KB)
 ==================================================
-downloaded 68 KB
+downloaded 765 KB
 
-* installing *source* package ‘purrr’ ...
-** package ‘purrr’ successfully unpacked and MD5 sums checked
+* installing *source* package ‘forecast’ ...
+** package ‘forecast’ successfully unpacked and MD5 sums checked
 ** libs
 ** R
-** preparing package for lazy loading
+** data
+*** moving datasets to lazyload DB
+** inst
+** byte-compile and prepare package for lazy loading
 ** help
 *** installing help indices
+*** copying figures
 ** building package indices
+** installing vignettes
 ** testing if installed package can be loaded
-* DONE (purrr)
+* DONE (forecast)
 
 The downloaded source packages are in
-	‘/private/var/folders/4j/n8nxnsy12y92t475g318yptm0000gn/T/RtmpwUhQpG/downloaded_packages’
+	‘/private/var/folders/4j/n8nxnsy12y92t475g318yptm0000gn/T/RtmpKRM4Ne/downloaded_packages’
 ```
 
 
