@@ -22,7 +22,7 @@ get_filename_arg <- function() {
 script_filename <- get_filename_arg()
 script_filename <- normalizePath(script_filename, mustWork = TRUE)
 script_dir <- dirname(dirname(script_filename))
-source(file.path(script_dir, "library", "rpkg", "R", "rpkg.R"))
+source(file.path(script_dir, "library", "Rpkg", "R", "rpkg.R"))
 #library_dir <- file.path(script_dir, "library")
 #.libPaths(library_dir)
 

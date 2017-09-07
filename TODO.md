@@ -1,3 +1,5 @@
+- Use Pacman for backend instead of DIY Rpkg backend?
+
 - Bundle optparse package w/ installation and manually set .lib.loc (using 
   .libPaths()) to install directory; will require install-time setup
 - Break out package management functions into separate package, and add that 

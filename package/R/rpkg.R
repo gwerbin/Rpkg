@@ -51,7 +51,7 @@ catn <- function(...) {
 }
 
 
-cat0 <- function (...) {
+cat0 <- function(...) {
   cat(..., sep = "")
 }
 
