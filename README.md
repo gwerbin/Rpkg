@@ -67,14 +67,16 @@ In the code and documentation, I assume that you have copied or linked
 `rpkg.R` with the name `Rpkg`, and that it is user-executable. Any other usage 
 is untested and unsupported.
 
-This script is intended to be run by `Rscript --no-save --no-restore`. It 
-_does_ source your init file, i.e. `Rprofile`. This is to ensure that any user 
-configuration like `options(repos = c(CRAN = "https://cloud.r-project.org"))` 
-is respected. HOWEVER, Rpkg is **not** robust to excessive tinkering, and if 
-something breaks try `Rscript --no-save --no-restore --no-init rpkg.R` before 
-reporting a bug.
+This script is intended to be run by `Rscript --no-save`. Note that `Rscript`
+already implies `--slave` and `--no-restore`. It _does_ source your init file,
+i.e. `Rprofile`. This is to ensure that any user configuration like
+`options(repos = c(CRAN = "https://cloud.r-project.org"))` is respected.
+HOWEVER, Rpkg is **not** robust to excessive tinkering, and if something breaks
+try `Rscript --no-save --no-init rpkg.R` before reporting a bug.
 
-The default repo when using this tool is `"https://cloud.r-project.org"`.
+The default CRAN repository when using this tool is
+`"https://cloud.r-project.org"`. The option to use a non-CRAN repository will
+become available after proper command-line parsing has been implemented.
 
 
 ## Usage instructions
@@ -162,3 +164,6 @@ Rpkg search ggplot
 Rpkg search '/^z[^aeiou]/' # pattern is a regular expression if wrapped in slashes
 Rpkg search '/^GG/'        # case-sensitive only if the pattern has an upper case character
 ```
+
+<!-- vim: ft=pandoc:
+-->
