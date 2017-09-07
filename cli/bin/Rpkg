@@ -1,0 +1,132 @@
+#! Rscript --no-save
+
+get_filename_arg <- function() {
+  cli_args <- commandArgs()
+  matches <- regexec("^--file=(.+)$", cli_args)
+
+  out <- mapply(function(s, m) {
+    if (any(m > 0)) {
+      substr(s, m[2], m[2] + attr(m, "match.length")[2])
+    } else {
+      NA
+    }
+  }, cli_args, matches)
+
+  out <- out[!is.na(out)]
+  if (!length(out)) {
+    stop("No '--file=<filename>' option found. Make sure you are using Rscript and not R itself.", call. = FALSE)
+  }
+  out
+}
+
+script_filename <- get_filename_arg()
+script_filename <- normalizePath(script_filename, mustWork = TRUE)
+script_dir <- dirname(dirname(script_filename))
+source(file.path(script_dir, "library", "rpkg", "R", "rpkg.R"))
+#library_dir <- file.path(script_dir, "library")
+#.libPaths(library_dir)
+
+rpkg_version <- sprintf("Rpkg version %s", ..VERSION..)
+
+rpkg_help <- sprintf(
+"Rpkg version %s
+
+Commands:
+    help                      [ subcommand ]
+      NOTE: not fully implemented
+    ( install | add )         pkg_name ...
+    ( uninstall | remove )    pkg_name ...
+    ( update | upgrade )      [ --all ] pkg_name ...
+    reinstall                 pkg_name ...
+    outdated
+    list
+    info                      pkg_name ...
+    search                    ( string | /regex/ )
+      NOTE: regex is PCRE, case-sensitive only if uppercase character is detected
+
+Options:
+    -V / --version
+    -h / --help
+",
+..VERSION..)
+
+
+# TODO: `help` accepts arguments and prints help info about each subcommand
+# TODO: automatically construct help strings?
+subcommand_help <- function(...) {
+  exit(sysexits$EX_OK, rpkg_help)
+}
+
+
+# TODO: handle arguments platform-independently
+# TODO: handle "--" to stop processing option flags?
+# TODO: handle "ask = TRUE" (why doesn't it work, anyway?)
+# TODO: handle verbosity
+# TODO: self-update?
+main <- function() {
+  # Set a default repo in case users don't have it in .Rprofile
+  # TODO: use the CRAN selector dialog like in interactive mode
+  repos <- getOption("repos", default = "@CRAN@")
+  if (repos == "@CRAN@") {
+    options(repos = c(CRAN = "https://cloud.r-project.org"))
+  }
+
+  cli_args <- commandArgs(trailingOnly = TRUE)
+
+  cmd <- cli_args[1]
+  pkgs <- cli_args[-1]
+
+  if (any(cli_args %in% c("-V", "--version"))) {
+    exit(sysexits$EX_OK, rpkg_version)
+  }
+
+  if (any(cli_args %in% c("-h", "--help"))) {
+    exit(sysexits$EX_OK, rpkg_help)
+  }
+
+  opts <- list()
+  if (cmd %in% c("update", "upgrade") && "--all" %in% cli_args) {
+    opts <- list(all = TRUE)
+    pkgs <- setdiff(pkgs, "--all")
+  }
+
+  tryCatch(
+    switch(
+      cmd,
+      "install"   = pkg_install(pkgs, opts),
+      "add"       = pkg_install(pkgs, opts),
+
+      "update"    = pkg_update(pkgs, opts),
+      "upgrade"   = pkg_update(pkgs, opts),
+
+      # TODO: handle pkg names
+      "outdated"  = pkg_outdated(NULL, opts),
+
+      "remove"    = pkg_remove(pkgs, opts),
+      "uninstall" = pkg_remove(pkgs, opts),
+
+      "reinstall" = pkg_reinstall(pkgs, opts),
+
+      "list"      = pkg_list(NULL, opts),
+      "info"      = pkg_info(pkgs, opts),
+      "search"    = pkg_search(pkgs, opts),
+
+      "help"      = subcommand_help(cmd),
+      `NA`        = exit(sysexits$EX_USAGE, "No command specified. Try `Rpkg help` for instructions."),
+      exit(sysexits$EX_USAGE, sprintf("Invalid command: %s", cmd))
+    ),
+    error = function(err) {
+      exit(sysexits$EX_SOFTWARE, paste("Error:", conditionMessage(err)))
+    },
+    warning = function(wrn) {
+      # treat warnings as errors for the purpose of a robust CLI tool
+      exit(sysexits$EX_SOFTWARE, paste("Error:", conditionMessage(wrn)))
+    }  
+  )
+}
+
+if (!interactive()) {
+  main()
+}
+
+#vim: set filetype=r:

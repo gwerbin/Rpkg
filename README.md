@@ -60,7 +60,7 @@ The downloaded source packages are in
 ## Installation instructions
 
 1. Install R version > 3.4 (older versions are untested and unsupported)
-2. `sudo ln -s ./rpkg.R /usr/local/bin/Rpkg`, or otherwise make the `rpkg.R` 
+2. `sudo ln -s "$PWD/cli/bin/rpkg.R" /usr/local/bin/Rpkg`, or otherwise make the `rpkg.R` 
    script visible in your system's `PATH` variable.
 
 In the code and documentation, I assume that you have copied or linked 
