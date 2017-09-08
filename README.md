@@ -59,9 +59,13 @@ The downloaded source packages are in
 
 ## Installation instructions
 
-1. Install R version > 3.4 (older versions are untested and unsupported)
-2. `sudo ln -s "$PWD/cli/bin/rpkg.R" /usr/local/bin/Rpkg`, or otherwise make the `rpkg.R` 
-   script visible in your system's `PATH` variable.
+1. `git clone` this repo or download and extract a tagged release.
+2. `make`
+3. `make install`, using `sudo` if necessary on your system. By default this installs to `/usr/local/bin/Rpkg`, but you can change that location with the `RPKG_INSTALL_PREFIX` environment variable.
+
+I've personally tested the Makefile on macOS GNU Make 3.81 and vanilla GNU Make 4.2.1. It's very straightforward, but your mileage might vary with BSD Make or other/ancient Makes.
+
+I've also only personally tested this on R version 3.4.1. I don't *think* I'm using anything specific to recent R versions, but if anything breaks in old versions, please file an issue.
 
 In the code and documentation, I assume that you have copied or linked 
 `rpkg.R` with the name `Rpkg`, and that it is user-executable. Any other usage 
