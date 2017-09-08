@@ -3,7 +3,7 @@
 #   - return S3 (?) classes/structures in this code
 #   - define format() and/or print() methods for S3 classes
 
-..VERSION.. <- "0.5.0-rc01"
+VERSION <- "0.5.0-rc01"
 
 
 ## TODO: use optparse or getopt library and .libPaths() so user doesn't have to have pkgs installed

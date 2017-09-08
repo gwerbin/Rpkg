@@ -1,18 +1,21 @@
 Package: Rpkg
 Title: Wrapper for R package management functions
-Version: 0.5.0-rc01
+Version: 0.5.0
 Authors@R: person("Gregory", "Werbin", email = "spam@me.gregwerbin.com",
                   role = c("aut", "cre"))
 Description: Wrapper for R package management functions. Not (yet) intended for 
     use outside the Rpkg command-line tool.
-Depends: R (>= 3.4.1)
+Depends:
+    R (>= 3.4.1)
+Imports:
+    optparse (>= 1.4.4)
 Suggests:
     devtools,
     seer,
     yearn,
     githubinstall,
     BiocInstaller,
-    install.load
+    install.load,
     packrat,
     checkpoint,
     drat,

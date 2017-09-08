@@ -1,4 +1,7 @@
 - Use Pacman for backend instead of DIY Rpkg backend?
+- Use Seer for CRAN search?
+- Use Packrat, Rbundler, or something else (DIY solution with devtools/remotes 
+  + cranlike to act like virtualenv, Ruby local gems, Node local pkgs, etc)
 
 - Bundle optparse package w/ installation and manually set .lib.loc (using 
   .libPaths()) to install directory; will require install-time setup
