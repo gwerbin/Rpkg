@@ -169,5 +169,9 @@ Rpkg search '/^z[^aeiou]/' # pattern is a regular expression if wrapped in slash
 Rpkg search '/^GG/'        # case-sensitive only if the pattern has an upper case character
 ```
 
+## Contributing
+
+Pull requests welcome! Development happens on the `dev` branch, which is merged to `master` for tagged releases.
+
 <!-- vim: ft=pandoc:
 -->
