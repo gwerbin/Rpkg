@@ -24,12 +24,9 @@ script_filename <- normalizePath(script_filename, mustWork = TRUE)
 script_dir <- dirname(script_filename)
 
 library_dir <- file.path(script_dir, "library")
-.libPaths(library_dir)
-exit <- Rpkg::exit
-sysexits <- Rpkg::sysexits
-#library(Rpkg, lib.loc = library_dir)
+library(Rpkg, lib.loc = library_dir)
 
-rpkg_version <- sprintf("Rpkg version %s", Rpkg::VERSION)
+rpkg_version <- sprintf("Rpkg version %s", VERSION)
 
 rpkg_help <- sprintf(
 "Rpkg version %s
@@ -51,7 +48,7 @@ Options:
     -V / --version
     -h / --help
 ",
-Rpkg::VERSION)
+VERSION)
 
 
 # TODO: `help` accepts arguments and prints help info about each subcommand
@@ -96,23 +93,23 @@ main <- function() {
   tryCatch(
     switch(
       cmd,
-      "install"   = Rpkg::pkg_install(pkgs, opts),
-      "add"       = Rpkg::pkg_install(pkgs, opts),
+      "install"   = pkg_install(pkgs, opts),
+      "add"       = pkg_install(pkgs, opts),
 
-      "update"    = Rpkg::pkg_update(pkgs, opts),
-      "upgrade"   = Rpkg::pkg_update(pkgs, opts),
+      "update"    = pkg_update(pkgs, opts),
+      "upgrade"   = pkg_update(pkgs, opts),
 
       # TODO: handle pkg names
-      "outdated"  = Rpkg::pkg_outdated(NULL, opts),
+      "outdated"  = pkg_outdated(NULL, opts),
 
-      "remove"    = Rpkg::pkg_remove(pkgs, opts),
-      "uninstall" = Rpkg::pkg_remove(pkgs, opts),
+      "remove"    = pkg_remove(pkgs, opts),
+      "uninstall" = pkg_remove(pkgs, opts),
 
-      "reinstall" = Rpkg::pkg_reinstall(pkgs, opts),
+      "reinstall" = pkg_reinstall(pkgs, opts),
 
-      "list"      = Rpkg::pkg_list(NULL, opts),
-      "info"      = Rpkg::pkg_info(pkgs, opts),
-      "search"    = Rpkg::pkg_search(pkgs, opts),
+      "list"      = pkg_list(NULL, opts),
+      "info"      = pkg_info(pkgs, opts),
+      "search"    = pkg_search(pkgs, opts),
 
       "help"      = subcommand_help(cmd),
       `NA`        = exit(sysexits$EX_USAGE, "No command specified. Try `Rpkg help` for instructions."),
