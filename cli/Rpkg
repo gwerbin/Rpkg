@@ -129,4 +129,4 @@ if (!interactive()) {
   main()
 }
 
-#vim: set filetype=r:
+# vim: set filetype=r:
