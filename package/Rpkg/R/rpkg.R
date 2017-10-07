@@ -223,8 +223,8 @@ pkg_outdated <- function(packages, opts = list()) {
   if (is.null(out)) {
     catn("All packages are up-to date")
   } else {
-    out <- out[, c("Installed", "ReposVer", "Repository")]
-    colnames(out) <- c("LocalVersion", "RemoteVersion", "Repo")
+    out <- out[, c("Package", "Installed", "ReposVer", "Repository")]
+    colnames(out) <- c("Package", "LocalVersion", "RemoteVersion", "Repo")
     rownames(out) <- rep("", nrow(out))
     print(out, quote = FALSE)
   }

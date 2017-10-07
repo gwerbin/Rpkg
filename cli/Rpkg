@@ -125,7 +125,13 @@ main <- function() {
   )
 }
 
+get_terminal_width <- function(default = 80) {
+    as.integer(Sys.getenv("COLUMNS", default))
+}
+
 if (!interactive()) {
+  op <- options(width = get_terminal_width(80))
+  on.exit(options(op))
   main()
 }
 
