@@ -2,15 +2,14 @@
 #   - move all side effects (i.e. "catn(...)") to CLI
 #   - return S3 (?) classes/structures in this code
 #   - define format() and/or print() methods for S3 classes
+#   - move sysexits to its own package
+#   - TODO: use optparse or getopt library and .libPaths() so user doesn't have to have pkgs installed
+#     e.g.:
+#         .libPaths('/usr/local/lib/rpkg/library')
+#     and then can call getopt::getopt() or optparse::OptionParser as usual
+#     NOTE: be careful with this because it could really swell installation size
 
 VERSION <- "0.5.0-rc01"
-
-
-## TODO: use optparse or getopt library and .libPaths() so user doesn't have to have pkgs installed
-## e.g.:
-##     .libPaths('/usr/local/lib/rpkg/library')
-## and then can call getopt::getopt() or optparse::OptionParser as usual
-## NOTE: be careful with this because it could really swell installation size
 
 
 #### Helpers ----
@@ -223,8 +222,8 @@ pkg_outdated <- function(packages, opts = list()) {
   if (is.null(out)) {
     catn("All packages are up-to date")
   } else {
-    out <- out[, c("Package", "Installed", "ReposVer", "Repository")]
-    colnames(out) <- c("Package", "LocalVersion", "RemoteVersion", "Repo")
+    out <- out[, c("Package", "Installed", "ReposVer")]
+    colnames(out) <- c("Package", "Installed", "Remote")
     rownames(out) <- rep("", nrow(out))
     print(out, quote = FALSE)
   }
