@@ -6,11 +6,15 @@ RPKG_LOCAL_LIB = cli/library
 RPKG_INSTALL_PREFIX = /usr/local
 RPKG_INSTALL_BIN = $(RPKG_INSTALL_PREFIX)/bin
 RPKG_INSTALL_SHARE = $(RPKG_INSTALL_PREFIX)/share/Rpkg
+
+SOURCES = package/Rpkg/R/rpkg.R
 INSTALL_ARTIFACTS = $(RPKG_INSTALL_BIN)/Rpkg $(RPKG_INSTALL_SHARE)/library
 
 $(RPKG_LOCAL_LIB):
 	mkdir -p $@
-$(RPKG_LOCAL_LIB)/Rpkg: package/Rpkg | $(RPKG_LOCAL_LIB)
+# track individual files in SOURCES because Make doesn't reliably pick up on 
+# whole-directory modifications
+$(RPKG_LOCAL_LIB)/Rpkg: package/Rpkg $(SOURCES) | $(RPKG_LOCAL_LIB)
 	$(R_INSTALL_QUICK) -l $| $<
 
 $(RPKG_INSTALL_BIN)/Rpkg: cli/Rpkg $(RPKG_LOCAL_LIB)/Rpkg
