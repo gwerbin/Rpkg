@@ -9,12 +9,12 @@ inconvenient to open an R console to manage the R package library.
 
 The interface is currently very minimal, and several features have not yet 
 been implemented. On the other hand, it has no dependencies other than R 
-itself. The vision is twofold:
+itself (for now). The vision is twofold:
 1. Create a simple, unified interface to the package management features 
    that are built into R.
 2. Reach a stable, complete 1.0 interface that will not need to change much. 
    In 10 years, when GitHub has gone the way of SourceForge, you should be 
-   able do download and run this program without serious problems, as long as 
+   able to download and run this program without serious problems, as long as 
    R itself does not undergo radical changes (which it historically has not).
 
 If you like this program, or please feel free to submit pull requests or post 
