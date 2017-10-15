@@ -130,7 +130,8 @@ get_terminal_width <- function(default = 80) {
 }
 
 if (!interactive()) {
-  op <- options(width = get_terminal_width(80))
+  twidth <- get_terminal_width(200)
+  op <- options(width = twidth)
   on.exit(options(op))
   main()
 }
