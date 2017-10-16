@@ -23,6 +23,7 @@ script_filename <- get_filename_arg()
 script_filename <- normalizePath(script_filename, mustWork = TRUE)
 script_dir <- dirname(script_filename)
 
+# TODO: make this configurable at "build time" -- CMake?
 library_dir <- file.path(script_dir, "library")
 library(Rpkg, lib.loc = library_dir)
 
