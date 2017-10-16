@@ -9,7 +9,7 @@
 #     and then can call getopt::getopt() or optparse::OptionParser as usual
 #     NOTE: be careful with this because it could really swell installation size
 
-VERSION <- "0.5.0-rc01"
+VERSION <- "0.5.0-rc02"
 
 
 #### Helpers ----
