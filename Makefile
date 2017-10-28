@@ -22,8 +22,8 @@ install: $(INSTALL_ARTIFACTS)
 uninstall:
 	rm -rf $(INSTALL_ARTIFACTS)
 clean:
-	R CMD REMOVE Rpkg
-	rm -rf $(R_LIB)
+	R CMD REMOVE optparse Rpkg || true
+	rm -rf $(RPKG_LOCAL_LIB)
 .PHONY: setup install uninstall clean
 
 
@@ -31,9 +31,9 @@ clean:
 
 $(RPKG_LOCAL_LIB):
 	mkdir -p $@
-# track individual files in SOURCES because Make doesn't reliably pick up on 
-# whole-directory modifications
-$(RPKG_LOCAL_LIB)/Rpkg: package/Rpkg $(SOURCES) | $(RPKG_LOCAL_LIB)
+$(RPKG_LOCAL_LIB)/optparse: | $(RPKG_LOCAL_LIB)
+	Rscript -e '.libPaths("$(RPKG_LOCAL_LIB)"); install.packages("optparse")'
+$(RPKG_LOCAL_LIB)/Rpkg: package/Rpkg $(SOURCES) $(RPKG_LOCAL_LIB)/optparse | $(RPKG_LOCAL_LIB)
 	$(R_INSTALL_QUICK) -l $| $<
 
 
