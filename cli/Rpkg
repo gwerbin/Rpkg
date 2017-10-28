@@ -34,21 +34,56 @@ rpkg_help <- sprintf(
 "Rpkg version %s
 
 Commands:
-    help                      [ subcommand ]
-      NOTE: not fully implemented
-    ( install | add )         pkg_name ...
-    ( uninstall | remove )    pkg_name ...
-    ( update | upgrade )      [ --all ] pkg_name ...
-    reinstall                 pkg_name ...
+    help [ SUBCOMMAND ]
+        Get help for SUBCOMMAND.
+
+    ( install | add ) PKG_NAME [ PKG_NAME ... ]
+        Install packages. See R help for install.packages().
+
+    ( uninstall | remove ) PKG_NAME [ PKG_NAME ... ]
+        Uninstall packages. See R help for remove.packages().
+
+    ( update | upgrade ) ( --all | [ PKG_NAME [ PKG_NAME ... ] ] )
+        Update packages. See R help for update.packages(). PKG_NAME is required 
+        if --all is not specified.
+
+    reinstall PKG_NAME [ PKG_NAME ... ]
+      Remove then reinstall packages.
+
     outdated
+      Print a list of outdated packages.
+
     list
-    info                      pkg_name ...
-    search                    ( string | /regex/ )
-      NOTE: regex is PCRE, case-sensitive only if uppercase character is detected
+      Print a list of installed packages.
+
+    info PKG_NAME [ PKG_NAME ... ]
+      Print package info from the repository.
+
+    search ( STRING | /REGEX/ )
+      Search for a package name in the repository. Regex is PCRE, and is 
+      case-sensitive only if it contains an upper-case character.
 
 Options:
-    -V / --version
-    -h / --help
+    Long options that accept arguments can be specified with
+        --option=ARG
+    or
+        --option ARG
+    interchangeably.
+
+    -V
+    --version      Print version info and exit.
+
+    -h
+    --help         Print this help and exit.
+
+    -v
+    --verbose       options(\"verbose\") <- TRUE
+
+    --type=TYPE     options(\"pkgType\") <- $TYPE
+
+    -j NJOBS
+    --jobs=[NJOBS]
+    --ncpu=[NJOBS]  options(\"Ncpu\") <- $NJOBS
 ",
 VERSION)
 
