@@ -6,7 +6,6 @@
 - [Installation](#installation)
 - [Usage](#usage)
   * [Examples](#examples)
-- [Contributing](#contributing) 
 <!-- TOC END -->
 
 
@@ -71,15 +70,19 @@ The downloaded source packages are in
 
 1. `git clone` this repo or download and extract a tagged release.
 2. `make` or `make setup`
-3. `make install`, using `sudo` if necessary on your system. By default this
+3. `make install`, using `sudo` if necessary for your system. By default this
    installs to `/usr/local/bin/Rpkg`, but you can change that location with the
    `RPKG_INSTALL_PREFIX` environment variable.
 
 Uninstall with `make uninstall`.
 
+Note that installation requires a symlink tothis repo, because the Library path
+is found dynamically. Future releases will use Cmake (or a similar tool) to
+configure and encode the correct paths so thatRpkg can be copied, not linked.
+
 I've personally tested the Makefile on the MacOS version of GNU Make (version
-3.81) and vanilla GNU Make 4.2.1. It's very straightforward, but your mileage
-might vary with BSD Make or other/ancient Makes.
+3.81) and vanilla GNU Make 4.2.1. Your mileage might vary with BSD Make or
+other/ancient Makes.
 
 I've also only personally tested this on R version 3.4. I don't *think* I'm
 using anything specific to recent R versions, but if anything breaks in old
