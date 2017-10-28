@@ -12,14 +12,15 @@
 
 ## What is this?
 
-This is a simple command-line interface to the R package manager. Typically this
-system is accessed using functions in the R console like `install.packages()`.
-I wrote this tool because sometimes I find it inconvenient to open an R console
-to manage the R package library.
+`Rpkg` is a simple command-line interface to the R package manager.
 
-The interface is currently very minimal, and several features have not yet been
-implemented. On the other hand, it has no dependencies other than R itself (for
-now). The vision is twofold:
+Typically, R user install packages in the console, using functions like
+`install.packages()`. I wrote this tool because I find it inconvenient to open
+an R console to manage the R package library. It is especially useful for
+scripting, which in turn can make it easier to encapsulate and reproduce your
+development or research environment.
+
+The vision for `Rpkg` is twofold:
 1. Create a simple, unified interface to the package management features that
    are built into R.
 2. Reach a stable, complete 1.0 interface that will not need to change much. In
@@ -27,12 +28,11 @@ now). The vision is twofold:
    download and run this program without serious problems, as long as R itself
    does not undergo radical changes (which it historically has not).
 
-If you like this program, or please feel free to submit pull requests or post
-issues with bugs reports, feature requests, etc. I can't guarantee that I'll
-have much time to work on it, but I do use it myself on a regular basis. So if
-there is a substantial improvement to be made or a serious bug to fix, I will be
-motivated to integrate the changes. See `TODO.md` for some of the roadmap, as
-well as the various `TODO`s in the source code itself.
+If you have any suggestions, requests, or bugs to report, please feel free to
+file an issue for them. You are also welcome to submit a pull request directly.
+If you would like to contribute but don't know where to start, see the file
+`TODO.md` some of the feature roadmap, or the various "TODO" comments in the
+code.
 
 ### Show-off example
 
@@ -142,7 +142,6 @@ Options:
 Install `caret` and `shiny` from CRAN:
 
 ```shell
-Rpkg install caret shiny
 Rpkg add caret shiny
 ```
 
@@ -150,20 +149,18 @@ Update `caret` and `shiny` to latest version on CRAN:
 
 ```shell
 Rpkg update caret shiny
-Rpkg upgrade caret shiny
 ```
 
 Update all packages:
 
 ```shell
-Rpkg upgrade --all
 Rpkg update --all
 ```
 
 Uninstall `caret` and `shiny`:
 
 ```shell
-Rpkg uninstall caret shiny
+Rpkg remove caret shiny
 ```
 
 Check for outdated packages, get info about the `forestFloor` package, list 
@@ -182,12 +179,6 @@ Rpkg search ggplot
 Rpkg search '/^z[^aeiou]/' # pattern is a regular expression if wrapped in slashes
 Rpkg search '/^GG/'        # case-sensitive only if the pattern has an upper case character
 ```
-
-
-## Contributing
-
-Pull requests welcome! Development happens on the `dev` branch, which is merged 
-to `master` for tagged releases.
 
 
 [modeline]: # ( vim: set fenc=utf-8 nospell ft=pandoc tw=80 et sw=4: )
