@@ -129,7 +129,7 @@ main <- function() {
       opts$Ncpu <- sub("^--(?:ncpu|jobs)=(\\w+)", "\\1", cli_args[i])
       cli_args <- cli_args[-i]
     } else if (i == length(cli_args)) {
-      exit(sysexits$EX_, "Missing argument for option -j/--jobs/--ncpu")
+      exit(sysexits$EX_NOINPUT, "Missing argument for option -j/--jobs/--ncpu")
     } else {
       opts$ncpu <- cli_args[i+1]
       cli_args <- cli_args[-(c(i,i+1))]

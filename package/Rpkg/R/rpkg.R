@@ -245,13 +245,13 @@ pkg_info <- function(packages, opts = list()) {
   pkg_inst <- as.data.frame(installed.packages())
   pkgs <- merge(pkg_avail, pkg_inst, by = "Package", suffixes = c("", "_DELETEME"), all = TRUE)
   pkgs <- pkgs[, grep("_DELETEME", names(pkgs), invert = TRUE)]
+  pkgs[["CRAN"]] <- paste0("https://cran.r-project.org/package=", pkgs[, "Package"])
 
   # TODO: parse and compare installed vs latest available in repo (e.g. version numbers)
   for (package in packages) {
     if (package %!in% pkgs$Package) {
       catn(sprintf("Unknown package: %s. Try: Rpkg search %s", package, package))
     } else {
-      catn(sprintf("~*~*~ %s ~*~*~", package))
       cat(sprintf("%s: %s", names(pkgs), as.character(pkgs[pkgs$Package == package,,drop = TRUE])), sep = "\n")
       cat("\n")
     }
