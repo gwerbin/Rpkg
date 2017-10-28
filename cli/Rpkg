@@ -25,6 +25,7 @@ script_dir <- dirname(script_filename)
 
 # TODO: make this configurable at "build time" -- CMake?
 library_dir <- file.path(script_dir, "library")
+#library(optparse, lib.loc = library_dir)
 library(Rpkg, lib.loc = library_dir)
 
 rpkg_version <- sprintf("Rpkg version %s", VERSION)
@@ -74,9 +75,6 @@ main <- function() {
 
   cli_args <- commandArgs(trailingOnly = TRUE)
 
-  cmd <- cli_args[1]
-  pkgs <- cli_args[-1]
-
   if (any(cli_args %in% c("-V", "--version"))) {
     exit(sysexits$EX_OK, rpkg_version)
   }
@@ -86,8 +84,52 @@ main <- function() {
   }
 
   opts <- list()
-  if (cmd %in% c("update", "upgrade") && "--all" %in% cli_args) {
-    opts <- list(all = TRUE)
+
+  if (length(i <- grep("(?:^-j)|(?:^--jobs)|(?:^--ncpu)", cli_args))) {
+    if (length(i) > 1) {
+      warning("Multiple --ncpu options specified; only the last one will be used")
+    }
+    i <- tail(i, 1)
+    if (grepl("^--(?:ncpu|jobs)=(\\S+)", cli_args[i])) {
+      opts$Ncpu <- sub("^--(?:ncpu|jobs)=(\\w+)", "\\1", cli_args[i])
+      cli_args <- cli_args[-i]
+    } else if (i == length(cli_args)) {
+      exit(sysexits$EX_, "Missing argument for option -j/--jobs/--ncpu")
+    } else {
+      opts$ncpu <- cli_args[i+1]
+      cli_args <- cli_args[-(c(i,i+1))]
+    }
+  }
+
+  if (length(i <- grep("^--type", cli_args))) {
+    if (length(i) > 1) {
+      warning("Multiple --type options specified; only the last one will be used")
+    }
+    i <- tail(i, 1)
+    if (grepl("^--type=(\\S+)", cli_args[i])) {
+      opts$type <- sub("^--type=(\\w+)", "\\1", cli_args[i])
+      cli_args <- cli_args[-i]
+    } else if (i == length(cli_args)) {
+      exit(sysexits$EX_, "Missing argument for option --type")
+    } else {
+      opts$type <- cli_args[i+1]
+      cli_args <- cli_args[-(c(i,i+1))]
+    }
+  }
+
+  # TODO: dump Rpkg options being sent
+  if (any(cli_args %in% c("-v", "--verbose"))) {
+    opts$verbose <- TRUE
+    cli_args <- setdiff(cli_args, c("-v", "--verbose"))
+  }
+
+  # TODO: pre-fetch dependencies and confirm before installing, like Conda
+
+  cmd <- cli_args[1]
+  pkgs <- cli_args[-1]
+
+  if (cmd %in% c("update", "upgrade") && "--all" %in% pkgs) {
+    opts <- opts$all <- TRUE
     pkgs <- setdiff(pkgs, "--all")
   }
 
@@ -122,7 +164,7 @@ main <- function() {
     warning = function(wrn) {
       # treat warnings as errors for the purpose of a robust CLI tool
       exit(sysexits$EX_SOFTWARE, paste("Error:", conditionMessage(wrn)))
-    }  
+    }
   )
 }
 
